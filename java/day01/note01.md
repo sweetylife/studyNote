@@ -33,3 +33,5 @@ javadoc -d myDoc -encoding utf-8 -author -version HelloWorld.java
 
 * 在一个java源文件中可以声明多个class。但最多有一个public class
 * 且public class 类名需要与文件名相同
+
+测试ssh
