@@ -78,6 +78,10 @@ System.out.println(a);
 
 公式：m=（m^n)^n
 
+## 4. 流程控制
+
+* switch结构中的表达式，只能是如下6种数据类型之一：byte、short、char、int、枚举类型（jdk5.0新增）、String类型（jdk7.0新增）
+
 ## 5. 例题
 
 ### 实现a,b交换
@@ -94,4 +98,3 @@ System.out.println(a);
 
 ![图 5](../../images/5edbf0432362db17fa99d613bc9f0550a607dfcaf45cd3dc9f0afa7904de9e46.png)  
 ![图 6](../../images/8f13178ffe3f9fcf47c0ef9f20db1dcbb031763919b82b70d5cb3d794c2ae6e8.png)  
-

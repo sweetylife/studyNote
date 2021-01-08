@@ -24,9 +24,8 @@ public class HelloWorld {
 		// short t = s + b;
 		System.out.println(a<b?"aa":"b");
 
-		boolean d=false;
-		if(d=false){
-		System.out.println(123);
-		}
+		String d="是";
+		String e="是";
+		System.out.println(d==e);
 	}
 }
