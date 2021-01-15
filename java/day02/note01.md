@@ -81,6 +81,23 @@ System.out.println(a);
 ## 4. 流程控制
 
 * switch结构中的表达式，只能是如下6种数据类型之一：byte、short、char、int、枚举类型（jdk5.0新增）、String类型（jdk7.0新增）
+* 不在循环条件部分限制次数的结构：for(;;) 或 while(true)
+* continue和break后都不可以跟执行语句，否则编译报错
+* break，continue默认跳出包裹此关键字最近的一层循环
+
+### 带标签的break和continue(跳出指定的循环)
+
+```java
+    label:for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(j==1){
+                break label;//结束指定标识的一层循环结构
+                //continue label;//结束指定标识的一层循环结构的当次循环
+            }
+            System.out.println(i+" "+j);
+        }
+    }
+```
 
 ## 5. 例题
 
@@ -98,3 +115,20 @@ System.out.println(a);
 
 ![图 5](../../images/5edbf0432362db17fa99d613bc9f0550a607dfcaf45cd3dc9f0afa7904de9e46.png)  
 ![图 6](../../images/8f13178ffe3f9fcf47c0ef9f20db1dcbb031763919b82b70d5cb3d794c2ae6e8.png)  
+
+### 输出100以内所有的质数(素数)
+
+```java
+    long start = System.currentTimeMillis();
+    label:for(int i=2;i<100;i++){
+        // 优化2：对所有数有效：（比如36  2,18   3,12   4,9   6,6--->最大值到开根号就可以）
+        for(int j=2;j<=Math.sqrt(i);j++){    
+            if(i%j==0){
+                continue label;//优化1: 对非质数有效，已经判断为质数的跳出循环
+            }
+        }
+        System.out.println(i);
+    }
+    long end =System.currentTimeMillis();
+    System.out.println("time:"+(end-start));
+```
