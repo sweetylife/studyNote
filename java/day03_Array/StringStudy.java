@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.Collections;
-
 public class StringStudy {
     public static void main(String[] args) {
         int[] ar = new int[4];
@@ -21,19 +19,21 @@ public class StringStudy {
         System.out.println(arr1[0]); // [I@8efb846
         System.out.println(arr1[0][0]); // 1
 
-        // int[][] arr3=new int[10][];
-        // for(int i=0;i<arr3.length;i++){
-        // arr3[i]=new int[(i+1)];
-        // for(int j=0;j<arr3[i].length;j++){
-        // if(j==0||j==arr3[i].length-1){
-        // arr3[i][j]=1;
-        // }else{
-        // arr3[i][j]=arr3[i-1][j-1] +arr3[i-1][j];
-        // }
-        // System.out.print(arr3[i][j]+" ");
-        // }
-        // System.out.println();
-        // }
+        System.out.println("----------------------------------");
+        // 杨辉三角
+        int[][] arr3=new int[10][];
+        for(int i=0;i<arr3.length;i++){
+        arr3[i]=new int[(i+1)];
+        for(int j=0;j<arr3[i].length;j++){
+        if(j==0||j==arr3[i].length-1){
+        arr3[i][j]=1;
+        }else{
+        arr3[i][j]=arr3[i-1][j-1] +arr3[i-1][j];
+        }
+        System.out.print(arr3[i][j]+" ");
+        }
+        System.out.println();
+        }
 
         System.out.println("----------------------------------");
         
@@ -68,7 +68,7 @@ public class StringStudy {
         // System.out.println("程序运行时间：" + (endTime - startTime) + "ms"); //输出程序运行时间
 
 
-        
+        System.out.println("----------------------------------");        
     
     }
 
