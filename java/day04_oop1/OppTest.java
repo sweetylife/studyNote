@@ -1,20 +1,21 @@
+import java.util.Arrays;
+
 public class OppTest{
     public static void main(String[] args) {
-        Person p1=new Person();
-        p1.name="Sweety";
-        p1.run();
+        // Person p1=new Person();
+        // p1.name="Sweety";
+        // p1.run();
+        OppTest test=new OppTest();
+       test.show(1,2);
     }
 
-}
-class Person{
-    String name;
-    int age;
-    Boolean isMale;
-
-    public void eat(){
-        System.out.println("eat");
+    public double show(double m,double n){
+        System.err.println("double");
+        return m+n;
     }
-    public void run(){
-        System.out.println("run");
+    
+    public int show(int m,int n){
+        System.out.println("int");
+        return m+n;
     }
 }
