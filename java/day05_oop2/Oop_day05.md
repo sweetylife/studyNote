@@ -1,0 +1,279 @@
+# the characteristics of object orientation
+
+## 1. Encapsulation
+
+### case
+
+* private methods just can be used by other methods in same class.
+* changing the number of legs must be done through the method of setLeg.
+
+```java
+public class Encapsulation{
+    public static void main(String[] args) {
+        Animal a=new Animal();
+        a.setLeg(6);
+        a.getLeg();
+    }
+}
+class Animal{
+    private int leg;
+    public void setLeg(int n){
+        leg=n>=0?n:0;
+    }
+    public int getLeg(){
+        return leg;
+    }
+}
+```
+
+### Permissions
+
+* private,default,protected,public
+
+![图 1](../../images/067eb223225e31e5ead5710b07043062224c441126c3793ae28760220f794628.png)  
+
+* **Four kind of permissions can decorate attribute,methods,constructors,inner classes**.
+* **But just public and default can decorate classes**.
+
+### JavaBean
+
+* class is public
+* have a public constructor
+* have attributes with get and set methods
+
+## 2. Succession
+
+* subclass inherits all attributes(conclude private attribute) and methods(conclude private private methods) of its parent class.
+
+* java.lang.Object class is all class's parent.
+
+## 3. Ploymorphism(just methods ,no attribute)
+
+* only the methods of superclass can be called ,but the methods of subclass are executed
+
+```java
+public class Person {
+    int id=1001;
+    public void walk(){
+        System.out.println("走路");
+    }
+}
+public class Student extends Person {
+    int id=1002;
+    public void walk() {
+        System.out.println("走很多路");
+    }
+    public void eat() {
+        System.out.println("吃很多");
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Person stu=new Student();//superclass name= new subclass()
+        stu.walk();//走很多路(right)
+        // stu.eat();//报错
+        System.out.println(stu.id);//1001(left)
+    }
+}
+```
+
+### precondition
+
+* superclass and subclass
+* override methods
+
+### exp1
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        Test test=new Test();
+        test.func(new Men());//走很多路 吃很多饭
+        test.func(new Student());//走很少路  吃很少饭
+    }
+    public void func(Person person){
+        person.walk();
+        person.eat();
+    }
+}
+
+public class Person {
+    public void walk(){
+        System.out.println("走路");
+    }
+    public void eat(){
+        System.out.println("吃饭");
+    }
+}
+public class Men extends Person {
+    public void walk() {
+        System.out.println("走很多路");
+    }
+    public void eat() {
+        System.out.println("吃很多饭");
+    }
+}
+public class Student extends Person {
+    public void walk() {
+        System.out.println("走很少路");
+    }
+    public void eat() {
+        System.out.println("吃很少饭");
+    }
+}
+```
+
+### exp2
+
+```java
+class Order{
+    public void method(Object obj)
+}
+```
+
+## 4. Override/overwrite(permission bigger,error smaller)
+
+### permission
+
+* the permission of override methods should bigger than superclass.
+* if the permission of superclass methods is private,the methods can't be overrided by subclass.
+
+```java
+// superclass
+public class Person {
+    public void eat(){
+        System.out.println("吃饭");
+    }
+    private void walk(){//can't be overrided because the permission is private
+        System.out.println("走路");
+    }
+    public void test(){
+        eat();
+        walk();
+    }
+}
+// subclass
+public class Student extends Person {
+    public void eat(){
+        System.out.println("吃很多饭");
+    }
+    public void walk(){
+        System.out.println("走很多路");
+    }
+}
+// test
+public class Test {
+    public static void main(String[] args) {
+        Student stu=new Student();
+        stu.test();
+    }
+}
+// resulte
+// 吃很多饭
+// 走路
+```
+
+### return type
+
+* if the return type of superclass is void,the subclass should be the same.
+* if the return type of superclass is A,the subclass should return A or the subclass of A.
+* if the return type of superclass is basic data type,the subclass should be the same.
+
+### error type
+
+* the error type of superclass should smaller than override methods  of subclass.
+
+### about static
+
+* If the methods of superclass(non-static) and the methods of subclass(no-static),then may be a override methods.
+
+* if both static methods of superclass and subclass,it is not override.
+
+## 5. Super
+
+### super can call the attributes,methods and constructor of superclass
+
+* attriute can not be cover.so the class have two attribute width same name,and need super to calling the attribute.
+
+```java
+public class Person {
+    int id=100;
+    String name="tian";
+}
+public class Student extends Person {
+    int id =200;
+    public void show(){
+        System.out.println(this.id); //200
+        System.out.println(super.id);//100(only the id of superclass is public or defualt)
+        System.out.println(name);//no need super because no attribute in subclass have the same name attribute.
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Student stu=new Student();
+        stu.show();
+    }
+}
+```
+
+* methods of superclass need to call the methods of superclass which had been overrided.
+
+```java
+public class Person {
+    public void walk(){
+        System.out.println("走路");
+    }
+}
+public class Student extends Person {
+    public void walk(){
+        System.out.println("走很多路");
+    }
+    public void show(){
+        this.walk(); //走很多路
+        super.walk();//走路
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Student stu=new Student();
+        stu.show();
+    }
+}
+```
+
+* super() can call the constructor of superclass
+
+```java
+public class Person {
+    private String name;
+    private int age;
+    public Person(){
+
+    }
+    public Person(String name,int age){
+        this.name=name;
+        this.age=age;
+    }
+}
+public class Student extends Person {
+    String major;
+    public Student(){
+
+    }
+    public Student(String name,int age,String major){
+        super(name,age);//call Person(String name,int age)
+        this.major=major;
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Student stu=new Student("tian",18,"computer");
+    }
+}
+```
+
+### 6. Tips
+
+* super() should on first line
+* this() and  super() can just use one.
+* Neither this() and super(),default a non-paramter super()

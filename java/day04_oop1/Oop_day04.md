@@ -111,6 +111,108 @@ public void show(String[] strs){
 
 ## 4. one of the structure of class：constructors
 
-## 5. one of the characteristics of object orientation：encapsulation
+* constructor can't have return type.
+* the permission of  default parameterless constructor same as current class.
+* If a constructor is defined,the system no longer provides the default parameterless constructor.
 
-## 6. key words
+```java
+public class Encapsulation{
+    public static void main(String[] args) {
+        Animal a=new Animal();
+    }
+}
+class Animal{
+    String name;
+    int age;
+    public Animal(){
+        System.out.println("constructor");
+    }
+    public Animal(String n){
+        name=n;
+        System.out.println("constructor");
+    }
+    public Animal(String n,int m){
+        name=n;
+        age=m;
+        System.out.println("constructor");
+    }
+}
+```
+
+### The order of initialization
+
+default -> explicit -> constructor -> object.filed
+
+## 5. key words
+
+### this
+
+* This can decorate attributes,methods,constructors.
+
+==**attributes,methods**==
+
+```java
+public class Encapsulation{
+    public static void main(String[] args) {
+        Animal a=new Animal();
+    }
+}
+class Animal{
+    String name;
+    int age;
+    public Animal(){
+        System.out.println("constructor");
+    }
+    public Animal(String name){
+        this.name=name;
+        System.out.println("constructor");
+    }
+}
+```
+
+==**constructors**==
+
+```java
+class Animal{
+    String name;
+    int age;
+    public Animal(){
+        System.out.println("constructor");
+    }
+    public Animal(String name){
+        this();//must be the first statement in a constructor
+        this.name=name;
+    }
+    public Animal(String name,int age){
+        this(name);
+        this.age=age;
+    }
+}
+```
+
+### package
+
+### mvc
+
+![图 1](../../images/a779262749805d8c6aeb94a243a9d2d3027bcc7562ca8f36ff3e53541a029625.png)  
+
+### import
+
+* import java.util.*;
+* java.lang can be omited.
+* if using classes under the same package,can omit import.
+* if using classes same name,should use all-name classes.
+
+```java
+com.atguigu.exer3.Account a1=new com.atguigu.exer3.Account();
+```
+
+* if using a subpackage,should import instead of xxx.*
+* import static:import the static constructions of classes,and the class's name can be omited.
+
+```java
+import static java.lang.System.*;
+import static java.lang.Math.*;
+out.println("hello");//System can be omited
+long num=round(112.34); //Math can be omited
+```

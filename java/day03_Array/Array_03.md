@@ -36,6 +36,18 @@ public class StringStudy {
 }
 ```
 
+==**特别的**==
+char[\]的println方法与其他数组的println方法不是同一个（重载），char[]的println输出的是拼接的char，而不是地址值
+
+```java
+public class StringStudy {
+    public static void main(String[] args){
+        char[] arr = new char[]{'A','b','c'};
+        System.out.println(arr); //Abc
+    }
+}
+```
+
 ### 4.一维数组元素的默认初始化
 
 * 数组元素是整型：0
