@@ -131,6 +131,103 @@ class Order{
 }
 ```
 
+### downward transition
+
+* Men m1 = (Men)p1;
+(may classCastException)
+
+```java
+public class Person {
+    public void eat(){
+        System.out.println("吃饭");
+    }
+}
+public class Men extends Person {
+    boolean isSmoking=true;
+    public void eat() {
+        System.out.println("吃很多饭");
+    }
+    public void work() {
+        System.out.println("工作");
+    }
+}
+public class Student extends Person {
+    boolean isGreat=true;
+    public void eat() {
+        System.out.println("吃很少饭");
+    }
+     public void study() {
+        System.out.println("写作业");
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Person p1=new Men();
+        p1.eat();//吃很多饭
+        // p1.work();//报错
+
+        Men m1=(Men)p1;
+        m1.work();//工作
+        m1.isSmoking;//true
+
+        Student s1 = (Student)p1;
+        s1.study();//编译通过，执行报错
+        s1.isGreat;//编译通过，执行报错
+    }
+}
+
+```
+
+* instanceof
+
+```java
+public class Person {
+    public void eat(){
+        System.out.println("吃饭");
+    }
+}
+public class Men extends Person {
+    boolean isSmoking=true;
+    public void eat() {
+        System.out.println("吃很多饭");
+    }
+    public void work() {
+        System.out.println("工作");
+    }
+}
+public class Student extends Person {
+    public void eat() {
+        System.out.println("吃很少饭");
+    }
+     public void study() {
+        System.out.println("写作业");
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Person p1=new Men();
+        p1.eat();//吃很多饭
+        // p1.work();//报错
+
+        if(p1 instanceof Men){ //true
+            Men m1=(Men)p1;
+            m1.work();//工作
+            m1.isSmoking;//true
+        }
+
+        if(p1 instanceof Student){ //false
+            Student s1 = (Student)p1;
+            s1.Study();
+            s1.isGreat;
+        }
+    }
+}
+```
+
+>p1 instanceof Men;//true
+p1 instanceof Person;//true
+p1 instanceof Object;//true
+
 ## 4. Override/overwrite(permission bigger,error smaller)
 
 ### permission
@@ -168,7 +265,7 @@ public class Test {
         stu.test();
     }
 }
-// resulte
+// result
 // 吃很多饭
 // 走路
 ```
@@ -272,8 +369,115 @@ public class Test {
 }
 ```
 
-### 6. Tips
+### Tips
 
 * super() should on first line
 * this() and  super() can just use one.
 * Neither this() and super(),default a non-paramter super()
+
+## 6. case
+
+```java
+class Base{
+    public void add(int a,int... arr){
+        System.out.println("Base");
+    }
+}
+class Sub extends Base{
+    public void add(int a,int[] arr){// （int[] arr） and （int... arr） override
+        System.out.println("Sub1");
+    }
+    public void add(int a,int b,int c){
+        System.out.println("Sub2");
+    }
+}
+
+public class Test{
+    public static void main(String[] args){
+        Base base = new Sub();//多态
+        base.add(1,2,3);//Sub1
+
+        // 重载
+        Sub sub = new Sub();
+        base.add(1,2,3);//Sub2
+    }
+}
+```
+
+## 7.Object
+
+==**order.getClass().getSuperclass()**==
+
+```java
+public class Test{
+    public static void main(String[] args){
+        Order order= new Order();
+        SYstem.out.println(order.getClass().getSuperclass());
+    }
+}
+class Order{
+
+}
+```
+
+### clone
+
+return a project
+
+```java
+Animal a1 = new Animal("小花");
+Animal a2 = (Animal) a1.clone();
+a2.setName("小猫");
+
+System.out.println(a1.getName());//小花
+```
+
+* finalize
+The finalize method is called before the object is collected.
+
+### equals & ==
+
+==**\==**==
+
+* base type(exception boolean) compare the value of variable
+* "String" can regard as base type
+
+* reference data variable compare the address
+* new String("String") is reference data variable
+
+```java
+//i==j==c==c2
+int i=65;
+double j=65.0;
+char c=65;
+char c2='A';
+```
+  
+==**equals**==
+
+* equals() in Object like ==(compare value)
+
+```java
+// source code
+public boolean equals(Object obj){
+    return (this == obj);
+}
+```
+
+* equals in String,Date,File,Wrapper is overwrote,then compared by value.
+
+### toString()
+
+* println(obj) default call obj.toString()
+* toString() in String,Date,File,Wrapper is overwrote,return value.
+
+```java
+// resource code
+public String toString(){
+    return getClass().getName()+"@"+Integer.toHexString(hashCode());
+}
+```
+
+## 8. unitTest
+
+* 
