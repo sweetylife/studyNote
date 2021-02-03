@@ -1,5 +1,6 @@
 public class Person {
-    public void eat(){
-        System.out.println("吃饭");
+    int count=10;
+    public void show(){
+        System.out.println("Person"+this.count);
     }
 }
