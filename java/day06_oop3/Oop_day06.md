@@ -342,10 +342,7 @@ class Bullet implements Flyable,Attackable{
 * 使用interface来定义
 * java中接口和类是并列的两个结构
 
-### 如何定义接口：定义接口的成员
-
-* JDK7：==**只能定义全局常量和抽象方法**==
-* JDK8：除了定义全局常量和抽象方法之外，还可以定义静态方法、默认方法
+### ==**JDK7：只能定义全局常量和抽象方法**==
 
 #### 定义接口
 
@@ -477,3 +474,455 @@ class DD implements CC{
     }
 }
 ```
+
+#### 父类与接口中属性的重名问题
+
+```java
+interface A{
+    int x = 0;
+}
+class B {
+    int x = 1;
+}
+class C extends B implements A{
+    public void fun(){
+        System.out.println(x);  //报错，x不能确定
+        System.out.println(A.x);//0 且A.x不能修改
+        System.out.println(super.x);//1
+    }
+    public static void main(String[] args){
+        new C().fun();
+    }
+}
+```
+
+C中会出现两个级别相同的x（一个是public static void int x，另个是int x），所以不能确定是哪个x
+
+### ==**JDK8：除了定义全局常量和抽象方法之外，还可以定义静态方法、默认方法**==
+
+* 静态方法(只能通过接口调用) ：public static
+* 默认方法（通过实现类的对象调用，且可以重写）：（public）default
+
+```java
+
+public class InterfaceTest8 {
+    public static void main(String[] args) {
+        CompareA.method();//compareA--01
+        SubClass.method();//subclass--01(这里不是重写，而是另外一个方法)
+        SubClass s=new SubClass();
+        s.method2();//subclass--02
+        s.method3();//compareA--03
+    }
+}
+
+interface CompareA{
+    // 静态方法
+    public static void method(){
+        System.out.println("compareA--01");
+    }
+    // 默认方法 这里的default不能省略
+    public default void method2(){
+        System.out.println("compareA--02");
+    }
+    // 默认方法 public可以省略
+    default void method3(){
+        System.out.println("compareA--03");
+    }
+
+}
+
+class SubClass implements CompareA{
+    public static void method(){
+        System.out.println("subclass--01");
+    }
+    public void method2(){
+        System.out.println("subclass--02");
+    }
+}
+```
+
+#### 父类与接口中出现同名方法的问题
+
+* 类优先原则（仅针对于方法）：如果子类（或实现类）继承的父类和实现的接口中声明了同名同参数的方法，且子类没有重写，则调用的是父类中的同名同参数方法
+
+* 实现多个接口，且多个接口中有同名默认方法，会报错，所以实现类必须重写该默认方法
+
+```java
+public void mymethod(){
+    method();//调用自己定义的重写方法
+    super.method();//调用的是父类声明的方法
+    CompareA.super.method();//调用的是CompareA中的method方法
+    CompareB.super.method();//调用的是CompareB中的method方法
+}
+```
+
+![图 2](../../images/3a3efbe2cbf8fa13c5ae51efbdbed019564720367f4325e6acc544c121871c4b.png)  
+
+### demo
+
+```java
+public class  Demo{
+    public static void main(String[] args) {
+        Demo demo=new Demo();
+
+        // 方法1
+        Printer printer = new Printer();
+        demo.func(printer);
+
+        // 方法2
+        demo.func(new Printer());
+
+        // 方法3
+        USB usb=new USB(){
+            @Override
+            public void start() {
+                System.out.println("匿名实现类 start");
+            }
+            @Override
+            public void stop() {
+                System.out.println("匿名实现类 stop");
+            }
+        };
+        demo.func(usb);
+
+        // 方法4
+        demo.func(new USB(){
+            @Override
+            public void start() {
+                System.out.println("匿名实现类 start");
+            }
+            @Override
+            public void stop() {
+                System.out.println("匿名实现类 stop");
+            }
+        });
+
+    }
+    public void func(USB usb){
+        usb.start();
+        usb.stop();
+    }
+}
+
+interface USB{
+    public void start();
+    public void stop();
+}
+
+class Printer implements USB{
+
+    @Override
+    public void start() {
+        System.out.println("printer start");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("printer stop");
+    }
+
+}
+```
+
+### 接口与抽象类的共同点和区别
+
+* 共同点
+  * 不能实例化
+  * 都可以定义抽象方法
+* 不用点
+  * 抽象类有构造器，接口没有构造器
+  * 抽象类单继承，接口多继承
+
+## 10. 设计模式之代理模式
+
+```java
+public class NetWorkTest {
+    public static void main(String[] args) {
+        Servers servers=new Servers();
+        ProxyServer proxyServer=new ProxyServer(servers);
+        proxyServer.browse();// 联网前的检查工作// 真实服务器联网
+    }
+}
+
+interface NetWork{
+    public void browse();
+}
+
+class Servers implements NetWork{
+    @Override
+    public void browse() {
+       System.out.println("真实服务器联网");
+    }
+}
+
+class ProxyServer implements NetWork{
+    private NetWork work;
+    public ProxyServer(NetWork work){
+        this.work=work;
+    }
+    @Override
+    public void browse() {
+        check();
+        work.browse();
+    }
+    public void check(){
+        System.out.println("联网前的检查工作");
+    }
+}
+```
+
+* 应用场景：1.安全代理，2.远程代理，3.延迟加载
+* 分类：静态代理，动态代理
+
+## 11. 设计模式之工厂模式
+
+> 实现创建者与调用者分离，即将创建对象的具体过程屏蔽隔离起来，达到提高灵活性的目的。
+
+### 分类
+
+* 简单工厂模式
+* 工厂方法模式
+* 抽象工厂模式
+
+### 简单工厂模式
+
+* 方法1
+
+```java
+
+class CarFactory {
+    public static Car getCar(String type){
+        if("奥迪".equals(type)){
+            return new Audi();
+        }else if("BYD".equals(type)){
+            return new BYD();
+        }else{
+            return null;
+        }
+    }
+}
+interface Car{
+    void run();
+}
+class Audi implements Car{
+
+    @Override
+    public void run() {
+       System.out.println("奥迪在跑");
+    }
+
+}
+class BYD implements Car{
+
+    @Override
+    public void run() {
+        System.out.println("比亚迪在跑");
+    }
+
+}
+```
+
+* 方法2
+
+```java
+
+class CarFactory {
+    public static Car getAudi(){
+        return new Audi();
+    }
+    public static Car BYD(){
+        return new BYD();
+    }
+
+}
+interface Car{
+    void run();
+}
+class Audi implements Car{
+
+    @Override
+    public void run() {
+       System.out.println("奥迪在跑");
+    }
+
+}
+class BYD implements Car{
+
+    @Override
+    public void run() {
+        System.out.println("比亚迪在跑");
+    }
+
+}
+```
+
+缺点：对于新增加产品，不修改代码的话，是无法扩展的，违背了开闭原则（对扩展开放，对修改封闭）
+
+### 工厂方法模式
+
+```java
+class CarFactory2 {
+    public static void main(String[] args) {
+        Car a = new AudiFactory().getCar();
+        Car b = new BYDFactory().getCar();
+        a.run();
+        b.run();
+    }
+}
+
+interface Car {
+    void run();
+}
+
+class Audi implements Car {
+
+    @Override
+    public void run() {
+        System.out.println("奥迪在跑");
+    }
+
+}
+
+class BYD implements Car {
+
+    @Override
+    public void run() {
+        System.out.println("比亚迪在跑");
+    }
+
+}
+
+// 工厂接口
+interface Factory {
+    Car getCar();
+}
+
+// 两个工厂类
+class AudiFactory implements Factory {
+
+    @Override
+    public Car getCar() {
+        return new Audi();
+    }
+
+}
+
+class BYDFactory implements Factory {
+
+    @Override
+    public Car getCar() {
+        return new BYD();
+    }
+
+}
+```
+
+## 12. 内部类
+
+1. java中允许将一个类声明再另一个类中
+2. 分类：成员内部类（静态，非静态） vs 局部内部类（方法内，代码块内，构造器内）
+3. 作用
+    * 作为外部类的成员
+        * 调用外部类的结构
+        * 可以被static修饰
+        * 可以被四种不同的权限修饰
+    * 作为一个类：
+        * 可以定义属性，方法，构造器，
+        * 可以继承
+        * 可以被final修饰
+        * 可以被abstract修饰
+
+    ```java
+
+    class Person3 {
+        // 成员内部类----静态
+        static class Head{
+
+        }
+        // 成员内部类----非静态
+        class Foot{
+
+        }
+        // 局部内部类----方法中
+        public void method() {
+            class AA {
+
+            }
+        }
+
+        // 局部内部类----代码块中
+        {
+            class BB {
+
+            }
+        }
+
+        // 局部内部类----构造器中
+        public Person3() {
+            class CC{
+
+            }
+        }
+    }
+    ```
+
+4. 注意的问题
+    * 如何实例化内部类的对象
+
+    ```java
+    // 静态内部类的实例化 
+    Person.Head head = new Person.Head();
+    // 非静态内部类的实现
+    Person p = new Person();
+    Person.Foot foot = p.new Foot();
+    foot.walk();
+    ```
+
+    * 如何在成员内部类中区分调用外部类的结构
+
+    ```java
+    // 1.方法
+    // 外部类中有eat方法
+    // 成员内部类----非静态
+    class Foot{
+        public void walk(){
+            // this 指的是Foot的对象
+            System.out.println("走路");
+            Person.this.eat();//可以省略 Person.this.指的是 Person类的对象的this
+        }
+    }
+    // 2.属性
+    //若外部类有name，内部类属性有name，形参也是name时
+    System.out.println(name);//形参
+    System.out.println(this.name);//内部类属性
+    System.out.println(Person.this.name);//外部类的对象的属性
+    ```
+
+    * 开发中局部类的使用
+
+    ```java
+    public class InnerClassTest1 {
+    
+        // 少见
+        public void method(){
+            // 局部内部类
+            class AA{
+
+            }
+        }
+
+        // 常见
+        // 返回一个实现了Comparable接口的类
+        public Comparable getComparable(){
+            class MyComparable implements Comparable{
+
+                @Override
+                public int compareTo(Object o) {
+                    return 0;
+                }
+
+            }
+            return new MyComparable();
+        }
+    }
+    ```
