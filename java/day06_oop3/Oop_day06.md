@@ -926,3 +926,32 @@ class BYDFactory implements Factory {
         }
     }
     ```
+
+5. 在局部内部类的方法中（比如show）如果调用局部内部类所声明的方法（method）中的局部变量（num），要求此局部变量声明为final的
+
+```java
+import Person3.Head;
+
+public class ClassAtrribute{
+    public static void main(String[] args) {
+       Persond persond= new Persond();
+       persond.method();
+    }
+}
+class Persond{
+    public void method(){
+        int num=10;
+        class Head{
+            public void show(){
+                // num=11;//报错，不能修改
+                System.out.println(num);
+            }
+        }
+        Head head=new Head();
+        head.show();
+    }
+}
+```
+  
+![图 1](../../images/9e5d9edeffb20357108818a6b839d86545da3addaeb59332fe9d69bc8132875b.png)  
+
