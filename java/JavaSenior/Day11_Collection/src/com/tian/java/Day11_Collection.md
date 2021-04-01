@@ -1,6 +1,7 @@
 # 集合
 
 ## 1.java集合框架概述
+
 * 集合、数组都是对多个数据进行存储操作的结构，简称java容器。存储：指内存层面的存储，不涉及到持久化的存储（.text,.jpg,数据库中等）
 * 数组在存储多个数据方面的特点
   * 一旦初始化以后，其长度就确定了
@@ -13,7 +14,7 @@
       * HashSet、LinkedHashSet、TreeSet
   * Map接口：key-value集合
     * HashMap、LinkedHashMap、TreeMap、Hashtable、Properties
-      
+
   ![img.png](img.png)
 
 ## 2.Collection接口方法
@@ -341,7 +342,7 @@ public class ForTest {
 
 ==**jdk8中**==
 
-* ArrayList list = new ArrayList();//底层创建的Object[]数组elementData初始化为{}，并没有创建长度    
+* ArrayList list = new ArrayList();//底层创建的Object[]数组elementData初始化为{}，并没有创建长度
 * list.add(123);//第一次调用add时，底层才创建了长度10的数组，并将数据123添加到elementData[0]，后续与jdk7相同  
 ...  
 * list.add(11);//此次添加导致底层elementData数组容量不都，则扩容，默认情况下，扩容为原来的1.5倍，同时需要将原有数组中的数据复制到新的数组中
@@ -349,15 +350,18 @@ public class ForTest {
 ### 4.3 LinkedList 的源码分析
 
 LinkedList结构  
-* transient int size = 0;   
-* transient Node<E> first;   
-* transient Node<E> last;
+
+* transient int size = 0;
+* transient Node first;
+* transient Node last;
 * protected transient int modCount = 0;(继承的)
 
 Node结构
+
 * E item;
-* Node<E> next;
-* Node<E> prev;
+* Node next;
+* Node prev;
+
 ```java
   /**
   * Links e as last element.
@@ -383,7 +387,6 @@ Node结构
 * 在扩容方面，默认扩容为原来的数组长度的2倍
 
 ### 4.5 List接口中的常用方法
-
 
 
 ## 5.Collection子接口二：Set

@@ -1,9 +1,12 @@
 # 枚举类与注解
 
 ## 1 枚举类
+
 ### 1.1 枚举类的使用
+
 * 枚举类的理解：类的对象只有有限个，确定的，称为枚举类
 * 当需要定义一组常量时，建议使用枚举类
+
 ### 1.2 定义枚举类
 
 #### 1.2.1 方法1
@@ -158,34 +161,37 @@ enum Seanson2 implements Info {
 ```
 
 ## 2 注解
+
 ### 2.1 注解的概述
+
 * 特殊标记 如：@Override
+
 ### 2.2 常见示例
 
 * 示例一：生成文档相关的注解
-    * @author
-    * @version
-    * @see 参考转向
-    * @since 从哪个版本增加
-    * @param 参数
-    * @return 返回值的说明
-    * @exception 可能异常说明
-    
+  * @author
+  * @version
+  * @see 参考转向
+  * @since 从哪个版本增加
+  * @param 参数
+  * @return 返回值的说明
+  * @exception 可能异常说明
+  
 * 示例二：编译时进行格式检查
-    * @Override
-    * @Deprecated
-    * @SuppressWarnings
-    
+  * @Override
+  * @Deprecated
+  * @SuppressWarnings
+  
 * 示例三：跟踪代码依赖性，实现替代配置文件功能
-    * @WebServlet("/login")     即访问login页面时执行该类
-    
+  * @WebServlet("/login")     即访问login页面时执行该类
+  
 * 示例四：spring框架中关于“事务”的管理
-    * @Test
-    * @After
-    * @AfterClass
-    * @Before
+  * @Test
+  * @After
+  * @AfterClass
+  * @Before
     等等
-      
+
 ### 2.3 自定义注解
 
 * @interface声明
@@ -208,10 +214,10 @@ class Person{
 ### 2.4 jdk提供的元注解
 
 * 元注解：对现有的注解进行解释说明的注解
-    * Retention：指定所修饰的注解的生命周期：SOURCE、CLASS（默认）、RUNTIME（只有声明为RUNTIME生命周期的注解才能通过反射获取）
-    * Target：用于指定被修饰的注解能修饰哪些程序元素
-    * Documented：表示所修饰的注解在被javadoc解析时会保留
-    * Inherited：被它修饰的注解会有继承性，比如Inherited修饰了@MyAnnotation，且@MyAnnotation注解Person，那么Person的子类也是被@MyAnnotation注解的
+  * Retention：指定所修饰的注解的生命周期：SOURCE、CLASS（默认）、RUNTIME（只有声明为RUNTIME生命周期的注解才能通过反射获取）
+  * Target：用于指定被修饰的注解能修饰哪些程序元素
+  * Documented：表示所修饰的注解在被javadoc解析时会保留
+  * Inherited：被它修饰的注解会有继承性，比如Inherited修饰了@MyAnnotation，且@MyAnnotation注解Person，那么Person的子类也是被@MyAnnotation注解的
 
 ```java
 import java.lang.annotation.Retention;
@@ -223,7 +229,7 @@ import java.lang.annotation.Target;
 public @interface MyAnnotation {
     String value() default "hi";
 }
-```    
+```
 
 ### 2.5 获取类的注解，通过反射获取注解信息（后续讲）
 

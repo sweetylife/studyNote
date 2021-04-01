@@ -418,7 +418,7 @@ public class DateTimeTest {
 
 ### 3.2 Instant
 
-```java 
+```java
 class Test{
     @Test
     public void test4(){
@@ -633,4 +633,3 @@ public class CompareTest {
   * subtract(val)
   * multiply(val)  返回this*val
   * divide(val,几位小数点，省略原则)  返回this/val
-

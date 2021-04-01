@@ -817,7 +817,6 @@ class Number implements Runnable {
   * Thread.sleep(),Thread.yield()（暂时释放cpu的操作权）等方法暂停当前线程的执行
   * 其他线程调用了该线程的suspend方法将该线程挂起（应尽量避免使用suspend和resume来控制线程
 
-
 ### 线程通信的应用：生产者消费者问题
 
 生产者（productor）将产品交给店员（clerk），消费者（customer）从店员处取走产品，店员一次只能持有固定数量的产品（20），如果多余20，生产者需要wait，如果少于0，消费者需要wait
