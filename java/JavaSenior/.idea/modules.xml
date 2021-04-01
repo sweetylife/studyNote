@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Day08_progress/Day08_progress.iml" filepath="$PROJECT_DIR$/Day08_progress/Day08_progress.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Day09_Common/Day09_Common.iml" filepath="$PROJECT_DIR$/Day09_Common/Day09_Common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Day10_OtherClass/Day10_OtherClass.iml" filepath="$PROJECT_DIR$/Day10_OtherClass/Day10_OtherClass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Day11_Collection/Day11_Collection.iml" filepath="$PROJECT_DIR$/Day11_Collection/Day11_Collection.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaSenior.iml" filepath="$PROJECT_DIR$/JavaSenior.iml" />
     </modules>
   </component>
