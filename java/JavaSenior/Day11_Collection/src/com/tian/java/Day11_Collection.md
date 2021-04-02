@@ -388,11 +388,102 @@ Node结构
 
 ### 4.5 List接口中的常用方法
 
+```java
+package com.tian.java;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class ListTest {
+
+    @Test
+    public void test(){
+        ArrayList list = new ArrayList();
+        list.add(123);
+        list.add(456);
+        list.add("AA");
+        list.add(false);
+
+        System.out.println(list);
+
+        //1.void add(int index,Object ele):在index的位置插入ele元素
+        list.add(1,"bb");
+        System.out.println(list);
+
+        //2.boolean addAll(int index,Collection eles):从index位置开始将eles中的所有元素添加到list中
+        List list1 = Arrays.asList(1,2,3);
+        list.addAll(list1);
+        list.addAll(2,list1);
+        System.out.println(list);
+
+        //3.Object get(int index):获取指定index位置的元素
+        System.out.println(list.get(2));
+
+    }
+
+    @Test
+    public void test2(){
+        ArrayList list = new ArrayList();
+        list.add(123);
+        list.add(456);
+        list.add("AA");
+        list.add(false);
+        list.add(456);
+
+        // 4.int indexOf(Object obj):返回obj在集合中首次出现的位置
+        System.out.println(list.indexOf(456));
+        // 5.int lastIndexOf(Object obj):返回obj在集合中最后一次出现的位置
+        System.out.println(list.lastIndexOf(456));
+        // 6.Object remove(int index,Object obj):移除指定index位置的元素，并返回此元素,默认是index
+        Object remove = list.remove(0);
+        System.out.println(remove);
+        // 7.Object set(int index,Object ele):设置指定index位置的元素ele
+        list.set(1,"cc");
+        System.out.println(list);
+        // 8.List subList(int fromIndex,int toIndex):返回左闭右开区间的子集合,原本的list不改变
+        List list1 = list.subList(2, 4);
+        System.out.println(list1);
+        System.out.println(list);
+
+    }
+}
+
+```
 
 ## 5.Collection子接口二：Set
 
+### ==**set:存储无序的，不可重复的数据 ,以HashSet为例说明**==
 
+1. 无序性：不等于随机性。存储的的数据在底层并不是按照数组索引的顺序添加的，而是根据数据的哈希值决定的。
+2. 不可重复性：保证添加的元素按照equals()判断时，不能反回true，即相同的元素只能添加一个。
 
+### ==**添加元素的过程：以HashSet为例**==
+
+我们想HashSet中添加元素a，首先调用元素a所在类的hashCode()方法，计算元素a的哈希值  
+
+此哈希值通过某种算法计算出在HashSet底层数组中的存放位置（即：索引位置）  
+
+判断数组此位置上是否有其他元素：
+
+1. 如果此位置上没有其他元素，则添加元素a
+2. 如果有其他元素，则跟该位置的链表上的所有元素equals对比，如果没有相同元素，则添加a在该链表上
+3. 如果有其他元素，则跟该位置的链表上的所有元素equals对比，如果有相同元素，则不添加a  
+
+==**七上八下**==
+
+* jDk7中：元素a放到数组中，指向原来的元素  (a)--->旧数组  
+* jdk8中：原来元素还在数组中，指向元素a   （旧数据）-->a  
+
+### 5.1三个实现类
+
+* HashSet：作为Set接口的主要实现类：线程不安全的，可以存储null值
+  * LinkedHashSet：作为HashSet的子类，遍历其内部数据时，可以按照添加的顺序遍历
+* TreeSet：使用二叉树存储，放入的数据需要是同一个类的对象，可以按照添加对象的指定属性，进行排序
+
+### 5.2
 
 ## 6.Map接口
 

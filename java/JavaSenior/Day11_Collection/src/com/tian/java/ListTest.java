@@ -41,6 +41,21 @@ public class ListTest {
         list.add("AA");
         list.add(false);
         list.add(456);
-        list.indexOf(456);
+
+        // 4.int indexOf(Object obj):返回obj在集合中首次出现的位置
+        System.out.println(list.indexOf(456));
+        // 5.int lastIndexOf(Object obj):返回obj在集合中最后一次出现的位置
+        System.out.println(list.lastIndexOf(456));
+        // 6.Object remove(int index,Object obj):移除指定index位置的元素，并返回此元素,默认是index
+        Object remove = list.remove(0);
+        System.out.println(remove);
+        // 7.Object set(int index,Object ele):设置指定index位置的元素ele
+        list.set(1,"cc");
+        System.out.println(list);
+        // 8.List subList(int fromIndex,int toIndex):返回左闭右开区间的子集合,原本的list不改变
+        List list1 = list.subList(2, 4);
+        System.out.println(list1);
+        System.out.println(list);
+
     }
 }
