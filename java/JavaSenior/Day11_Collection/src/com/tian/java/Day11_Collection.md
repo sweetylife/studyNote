@@ -477,14 +477,135 @@ public class ListTest {
 * jDk7中：元素a放到数组中，指向原来的元素  (a)--->旧数组  
 * jdk8中：原来元素还在数组中，指向元素a   （旧数据）-->a  
 
-### 5.1三个实现类
+### 5.1 接口的框架
 
 * HashSet：作为Set接口的主要实现类：线程不安全的，可以存储null值
   * LinkedHashSet：作为HashSet的子类，遍历其内部数据时，可以按照添加的顺序遍历
 * TreeSet：使用二叉树存储，放入的数据需要是同一个类的对象，可以按照添加对象的指定属性，进行排序
 
-### 5.2
+### 5.2 注意
 
+* Set接口中没有额外定义新的方法，使用的都是Collection中声明过的方法
+* 要求：向Set中添加的数据，其所在的类一定要重写equals和hashcode方法（相同的对象有相同的散列码）
+  * 重写小技巧：对象中用作equals()方法比较的Field，都应该用来计算hashcode值。
+  
+### 5.3 LinkedHashSet
+
+* LinkedHashSet作为hashSet的子类，在添加数据的同事，每个数据还维护了两个引用，记录次数据前一个数据个后一个数据。
+* 有点：对于频繁的遍历操作，LinkedHashSet效率高于HashSet
+
+### 5.4 TreeSet
+
+* 向TreeSet中添加的数据，要求是相同类的对象
+* 两种排序方式：自然排序（实现Comparable接口） 和 定制排序（Comparator）
+* 自然排序中，比较两个对象是否相同的标准为：CompareTo()返回0.不再是equals().
+* 定制排序中，比较两个对象是否相同的标准为：compare()返回0，不再是equals().
+
+#### 5.4.1 自然排序
+
+```java
+package com.tian.java;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.TreeSet;
+
+public class SetTest {
+    @Test
+    public void test1(){
+        TreeSet treeSet = new TreeSet();
+        treeSet.add(new User("Tome",12));
+        treeSet.add(new User("Jerry",32));
+        treeSet.add(new User("Mike",15));
+        treeSet.add(new User("Jack",19));
+        treeSet.add(new User("Jack",20));
+
+    }
+}
+class User implements Comparable{
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof User){
+            User user = (User) o;
+            int compare =  this.name.compareTo(user.name);
+            if(compare!=0){
+                return compare;
+            }else {
+                return Integer.compare(this.age,user.age);
+            }
+        }else {
+            throw new RuntimeException("输入的类型不匹配");
+        }
+    }
+}
+
+```
+
+#### 5.4.2 定制排序
+
+```java
+package com.tian.java;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class SetTest {
+    @Test
+    public void test2(){
+        Comparator com = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                if(o1 instanceof User && o2 instanceof User){
+                    User u1 = (User) o1;
+                    User u2 = (User) o2;
+                    return Integer.compare(u1.getAge(),u2.getAge());
+                }else {
+                    throw new RuntimeException("输入的数据类型不匹配");
+                }
+            }
+        };
+        TreeSet treeSet = new TreeSet(com);
+
+    }
+}
+class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+
+```
 ## 6.Map接口
 
-## 7.Collections工具类
+双列数据，存储key-value对的数据
+
+* HashMap:作为Map的主要实现类；线程不安全的，效率高；存储null的key和value
+  * LinkedHashMap:保证在遍历map元素是，可以按住奥添加的顺序实现遍历（原因：在原有的HashMap底层结构基础上，添加一对指针，指向前一个和后一个元素，适用于频繁遍历的操作）
+ 
+* TreeMap:保证按照添加的key-value对进行排序，实现排序遍历。此时考虑key的自然排序或定制排序（底层使用红黑树）  
+* Hashtable：作为古老的实现类；线程安全的，效率低，不能存储null的key和value
+  * Properties:常用来处理配置文件，key和value都是String类型
+
+## 7.Collections工具
