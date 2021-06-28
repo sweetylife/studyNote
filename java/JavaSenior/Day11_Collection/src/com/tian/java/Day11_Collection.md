@@ -600,12 +600,229 @@ class User {
 
 ## 6.Map接口
 
-双列数据，存储key-value对的数据
+### 6.1 双列数据，存储key-value对的数据
 
 * HashMap:作为Map的主要实现类；线程不安全的，效率高；存储null的key和value
   * LinkedHashMap:保证在遍历map元素是，可以按住奥添加的顺序实现遍历（原因：在原有的HashMap底层结构基础上，添加一对指针，指向前一个和后一个元素，适用于频繁遍历的操作）
 * TreeMap:保证按照添加的key-value对进行排序，实现排序遍历。此时考虑key的自然排序或定制排序（底层使用红黑树）  
 * Hashtable：作为古老的实现类；线程安全的，效率低，不能存储null的key和value
   * Properties:常用来处理配置文件，key和value都是String类型
+  
+### 6.2 Map结构的理解
 
-## 7.Collections工具
+* Map中的key：无序的、不可重复的，使用Set存储所有的key--->key所在的类要重写equals()和hashCode()方法（以HashCode为例）
+* Map中的value：无序的、可重复的，使用Collection存储所有的value--->value所在的类要重写equals()
+* 一个键值对：key-value构成了一个Entry对象
+* Map中的entry：无序的、不可重复的，使用Set存储所有的entry
+
+### 6.3 HashMap的底层实现原理（JDK7为例）
+
+HashMap map = new HashMap();  
+在实例化以后，底层创建了长度是16的以为数组Entry[] table.  
+map.put(key1,value1):  
+首先，调用key1所在类的hashCode()计算key1哈希值，此哈希值经过某种算法计算以后，得到在Entry数组中的存放位置。  
+* 如果此位置上的数据为空，添加成功。①  
+* 如果此位置上的数据不为空，意味着此位置上存在一个或多个数据（以链表形式存在），比较key1和已经存在的数据的哈希值  
+  * 如果key1的哈希值与其他数据都不同，添加成功。②  
+  * 如果key2的哈希值与某一个数据（key2-value2）的哈希值相同，继续比较：调用key1所在类的equals（key2）
+    * 如果equals()返回false：添加成功 ③
+    * 如果equals()返回true，使用value1替换value2 ④
+
+* 扩容问题：扩容为原来容量的2倍，并将原有的数据复制过来（？如何扩容）
+
+### 6.4 jdk8相较于jdk7在底层实现方面的不同
+
+* new HashMap()：底层没有创建一个长度为16的数组
+* jdk8底层的数组是：Node[]，而非Entry[]
+* 首次调用put()方法时，底层创建长度为16的数组
+* jdk7底层结构只有：数组+链表。jdk8中底层结构：数组+链表+红黑树
+* 当数组的某一个索引位置上的元素以链表形式存在的数据个数>8且当前数组长度>64时，此时次索引位置上的所有数组改为使用红黑树存储
+
+### 6.5 LinkedHashMap的底层实现原理（了解）
+
+添加了before和after属性，能够记录添加的顺序
+
+### 6.6 Map的常用方法
+
+**元素增删的操作**
+
+* put(Object key,Object value); 将指定key-value添加到（或修改）当前map对象中
+* putAll(Map m):将m中所有key-value对存放到当前map中
+* remove(Object key):移除指定key的key-value对，并返回value
+* clear()：清空当前map中的所有数据
+
+**元素查询的操作**
+
+* object get(key):获取指定key对应的value
+* boolean containsKey(Object key):是否包含指定的key
+* boolean containsValue(Object value):是否包含指定的value
+* int size():返回map中key-value对的个数
+* boolean isEmpty()：判断当前map是否为空
+* boolean equals(Object obj):判断当前map和参数对象obj是否相等
+
+**元视图操作的方法**
+
+* Set keySet():返回所有的key构成的Set集合
+* Collection values():返回所有value构成的Collection集合
+* Set entrySet():返回所有key-value对构成的Set集合
+
+### 6.7 TreeMap的使用
+
+向TreeMap中添加Key-value,要求key必须是由同一个类创建的对象
+
+**自然排序** 
+
+* 需要User实现comparable，重写compareTo方法
+
+```java
+package com.tian.java;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeMap;
+
+public class TreeMapTest {
+    //向TreeMap中添加Key-value,要求key必须是由同一个类创建的对象
+    //因为要按照key进行排序：自然排序、定制排序
+
+    //自然排序
+    //需要User实现comparable，重写compareTo方法
+    @Test
+    public void test1(){
+        TreeMap treeMap = new TreeMap();
+        User tom = new User("Tom", 23);
+        User jerry = new User("Jerry", 26);
+        User jack = new User("Jack", 21);
+        User rose = new User("Rose", 19);
+        treeMap.put(tom,98);
+        treeMap.put(jerry,89);
+        treeMap.put(jack,76);
+        treeMap.put(rose,100);
+
+        Set set = treeMap.entrySet();
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
+    }
+}
+
+```
+
+**定制排序**
+
+```java
+package com.tian.java;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeMap;
+
+public class TreeMapTest {
+    //向TreeMap中添加Key-value,要求key必须是由同一个类创建的对象
+    //因为要按照key进行排序：自然排序、定制排序
+  
+    //定制排序
+    //根据key的CompareTo排序
+    @Test
+    public void test2(){
+        TreeMap treeMap = new TreeMap(new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                if(o1 instanceof User && o2 instanceof User){
+                    User u1 = (User) o1;
+                    User u2 = (User) o2;
+                    return Integer.compare(u1.getAge(),u2.getAge());
+                }
+                throw new RuntimeException("输入的类型不匹配");
+            }
+        });
+
+        User tom = new User("Tom", 23);
+        User jerry = new User("Jerry", 26);
+        User jack = new User("Jack", 21);
+        User rose = new User("Rose", 19);
+        treeMap.put(tom,98);
+        treeMap.put(jerry,89);
+        treeMap.put(jack,76);
+        treeMap.put(rose,100);
+
+        Set set = treeMap.entrySet();
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
+    }
+}
+
+```
+
+### 6.8 Properties
+jdbc.properties文件
+```properties
+name=Tom甜甜
+age=123
+```
+乱码问题的解决
+![img_1.png](img_1.png)
+
+```java
+package com.tian.java;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+public class PropertiesTest {
+    public static void main(String[] args) {
+        FileInputStream fileInputStream = null;
+        try {
+            Properties properties = new Properties();
+            fileInputStream = new FileInputStream("jdbc.properties");
+            properties.load(fileInputStream);
+            String name = properties.getProperty("name");
+            String age = properties.getProperty("age");
+            System.out.println("name:"+name+",age:"+age);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(fileInputStream!=null){
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+## 7.Collections工具类
+
+Collections是操作Collection（Set、List）、Map的工具类
+
+**常用方法**
+
+* reverse(List):反转List中元素的顺序
+* shuffle(List):对List集合元素进行随机排序
+* sort(List):根据元素的自然顺序对指定List集合元素按升序排序
+* sort(List,Comparator):根据指定的Comparator产生的顺序对List集合元素进行排序
+* swap(List,int,int):将指定List集合中的i处的元素与j处的元素进行交换
+
+* Object max(Collection):根据元素的自然排序，返回给定集合中的最大元素
+* Object max(Collection,Comparator):根据Comparator指定的排序，返回给定集合中的最大元素
+* Object min(Collection):根据元素的自然排序，返回给定集合中的最小元素
+* Object min(Collection,Comparator):根据Comparator指定的排序，返回给定集合中的最小元素
+* int frequency(Collection,Object):返回指定集合中指定元素的出现次数
+* void copy(List dest, List src):将src中的内容复制到dest中
+* boolean replaceAll(List ist, Object oldVal,Object newVal):使用新值替换list对应的旧值
+
+
+

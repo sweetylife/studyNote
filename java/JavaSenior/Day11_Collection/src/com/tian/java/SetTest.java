@@ -3,11 +3,13 @@ package com.tian.java;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 public class SetTest {
     @Test
     public void test1(){
+        new HashMap<>();
         TreeSet treeSet = new TreeSet();
         treeSet.add(new User("Tome",12));
         treeSet.add(new User("Jerry",32));
@@ -65,5 +67,13 @@ class User implements Comparable{
 
     public int getAge() {
         return age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
