@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class GenericTest {
     @Test
     public void test1(){
@@ -13,5 +15,18 @@ public class GenericTest {
         stringOrder.setOrderT("123");
         stringOrder.setOrderT("abc");
 
+    }
+    @Test
+    public void test2(){
+        List<? extends Person> list1 = null;
+        List<? super Person> list2 = null;
+
+        //可以赋值给list1的
+        List<Student> list3 = null;
+        List<Person> list4 = null;
+
+        //可以赋值给list2的
+        List<Person> list5 = null;
+        List<Object> list6 = null;
     }
 }
