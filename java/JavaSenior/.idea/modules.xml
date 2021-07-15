@@ -8,6 +8,8 @@
       <module fileurl="file://$PROJECT_DIR$/Day11_Collection/Day11_Collection.iml" filepath="$PROJECT_DIR$/Day11_Collection/Day11_Collection.iml" />
       <module fileurl="file://$PROJECT_DIR$/Day12_Generic/Day12_Generic.iml" filepath="$PROJECT_DIR$/Day12_Generic/Day12_Generic.iml" />
       <module fileurl="file://$PROJECT_DIR$/Day13_IO/Day13_IO.iml" filepath="$PROJECT_DIR$/Day13_IO/Day13_IO.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Day14_Network/Day14_Network.iml" filepath="$PROJECT_DIR$/Day14_Network/Day14_Network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Day15_Reflection/Day15_Reflection.iml" filepath="$PROJECT_DIR$/Day15_Reflection/Day15_Reflection.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaSenior.iml" filepath="$PROJECT_DIR$/JavaSenior.iml" />
     </modules>
   </component>
