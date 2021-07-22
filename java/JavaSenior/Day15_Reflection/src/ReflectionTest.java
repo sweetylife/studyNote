@@ -4,10 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 import java.util.Properties;
 import java.util.Random;
 
@@ -164,5 +162,160 @@ public class ReflectionTest {
             System.out.println();
         }
     }
+    @Test
+    public void test8(){
+        Class<Person> clazz = Person.class;
+        //getMethods（） 获取当前运行时类及其所有父类中声明为public的方法
+        Method[] methods = clazz.getMethods();
+        for (Method m :methods){
+            System.out.println(m);
+        }
+        //getDeclareMethods（）获取当前运行时类中声明的所有方法。（不包含父类中声明的方法）
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method m: declaredMethods) {
+            //1.获取方法声明的注释
+            Annotation[] annotations = m.getAnnotations();
+            for (Annotation a:annotations){
+                System.out.println(a);
+            }
+            //2.权限修饰符
+            System.out.println(Modifier.toString(m.getModifiers()));
+            //3.返回值类型
+            System.out.println(m.getReturnType().getName());
+            //4.方法名
+            System.out.println(m.getName());
+            //5.形参列表
+            Class<?>[] parameterTypes = m.getParameterTypes();
+            if (!(parameterTypes == null || parameterTypes.length == 0)){
+                for (int i=0;i<parameterTypes.length;i++){
+                    if (i==parameterTypes.length-1){
+                        System.out.println(parameterTypes[i].getName()+"args_"+i);
+                        break;
+                    }
+                    System.out.println(parameterTypes[i].getName()+"args_"+i+",");
+                }
+            }
+            //6.抛出的异常
+            Class<?>[] exceptionTypes = m.getExceptionTypes();
+            if(!(exceptionTypes==null||exceptionTypes.length==0)){
+                System.out.print("throws ");
+                for (int i = 0; i < exceptionTypes.length; i++) {
+                    if (i==exceptionTypes.length-1){
+                        System.out.println(exceptionTypes[i].getName());
+                        break;
+                    }
+                    System.out.println(exceptionTypes[i].getName()+",");
+                }
+            }
+        }
+    }
+    @Test
+    public void test9(){
+        Class<Person> clazz = Person.class;
+        //getConstructors() 获取当前运行时类中声明为public的构造器
+        Constructor<?>[] constructors = clazz.getConstructors();
+        for (Constructor i:constructors){
+            System.out.println(i);
+        }
+        //getDeclaredConstructors() 获取当前运行时类中声明的所有构造器
+        Constructor<?>[] declaredConstructors = clazz.getDeclaredConstructors();
+        for (Constructor i:declaredConstructors){
+            System.out.println(i);
+        }
+    }
+    //获取父类
+    @Test
+    public void test10(){
+        Class<Person> clazz = Person.class;
+        Class<? super Person> superclass = clazz.getSuperclass();
+        System.out.println(superclass);
+    }
+    //获取带泛型的父类
+    @Test
+    public void test11(){
+        Class<Person> clazz = Person.class;
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        System.out.println(genericSuperclass);
+    }
+    //获取带泛型的父类的泛型
+    @Test
+    public void test12(){
+        Class<Person> clazz = Person.class;
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        ParameterizedType paramType = (ParameterizedType) genericSuperclass;
+        //获取泛型类型
+        Type[] actualTypeArguments = paramType.getActualTypeArguments();
+        System.out.println(((Class)actualTypeArguments[0]).getName());
+    }
+
+    //获取运行时类实现的接口
+    @Test
+    public void test13(){
+        Class<Person> clazz = Person.class;
+        Class<?>[] interfaces = clazz.getInterfaces();
+        for (Class c : interfaces) {
+            System.out.println(c);
+        }
+        //获取父类实现的接口
+        Class<?>[] interfaces1 = clazz.getSuperclass().getInterfaces();
+        for (Class c : interfaces1) {
+            System.out.println(c);
+        }
+    }
+
+    //如何操作运行时类的指定的属性
+    @Test
+    public void test14() throws Exception {
+        Class<Person> clazz = Person.class;
+        //创建运行时类的对象
+        Person person = clazz.newInstance();
+
+            //方式1：
+            //获取指定的属性(要求运行时类中属性声明为public）
+            //Field id = clazz.getField("id");
+
+        //方式2：
+        //获取指定的属性
+        Field id = clazz.getDeclaredField("id");
+        id.setAccessible(true);
+        //设置当前属性的值
+        //set（）
+        id.set(person,1001);
+        //获取指定属性的值
+        Object o = id.get(person);
+        System.out.println(o);
+    }
+
+    //如何操作运行时类中指定的方法
+    @Test
+    public void test15() throws Exception{
+        Class<Person> clazz = Person.class;
+        Person person = clazz.newInstance();
+        //getDeclaredMethod()：参数1：指明获取的对象的名称，参数2：调取方法的形参列表
+        Method show = clazz.getDeclaredMethod("showNation", String.class);
+        show.setAccessible(true);
+        Object invoke = show.invoke(person, "中国");
+        System.out.println(invoke);
+
+        //如何调用静态方法
+        Method show1 = clazz.getDeclaredMethod("show");
+        show1.setAccessible(true);
+        Object invoke1 = show1.invoke(null);
+        System.out.println(invoke1);
+    }
+
+    //如何调用运行时类中的构造器
+    @Test
+    public void test16() throws Exception{
+        Class<Person> clazz = Person.class;
+        //1.获取指定的构造器
+        Constructor<Person> declaredConstructor = clazz.getDeclaredConstructor(String.class);
+        //2.保证此构造器是可以访问的
+        declaredConstructor.setAccessible(true);
+        //3.调用构造器运行时类的对象
+        Person tom = declaredConstructor.newInstance("Tom");
+        System.out.println(tom);
+    }
+
 }
 

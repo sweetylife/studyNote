@@ -1,4 +1,5 @@
 public class Person {
+    public int id;
     private String name;
     public int age;
 
@@ -29,7 +30,7 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
-    public void show(){
+    public static void  show(){
         System.out.println("hello");
     }
     private String showNation(String nation){
