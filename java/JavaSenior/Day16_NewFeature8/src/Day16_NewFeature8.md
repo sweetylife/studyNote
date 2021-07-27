@@ -130,3 +130,249 @@ Lambda表达式的语法糖
     
 * 要求：接口抽象方法的返回类型和参数类型与已经有实现的方法的返回类型和参数类型一样
 
+```java
+import org.junit.Test;
+
+import java.util.Comparator;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+public class MethodRefTest {
+    //情况1：对象::非静态方法
+    //Consumer中的void accept(T t)
+    //PrintStream 中的void println(T t)
+    @Test
+    public void test1(){
+        Consumer<String> con = str -> System.out.println(str);
+        con.accept("北京");
+        System.out.println("---------------------------------------");
+        Consumer<String> con1 = System.out::println;
+        con1.accept("北京");
+    }
+    //情况2：类::静态方法
+    @Test
+    public void test2(){
+        Comparator<Integer> com1 = (t1,t2)->Integer.compare(t1,t2);
+        int compare = com1.compare(12, 21);
+        System.out.println(compare);
+        System.out.println("--------------------------------------");
+        Comparator<Integer> com2 = Integer::compare;
+        int compare1 = com2.compare(12, 21);//相当于Integer.compare(12, 21)
+        System.out.println(compare1);
+    }
+    //情况3：类::非静态方法
+    @Test
+    public void test3(){
+        Comparator<Integer> com1 = (t1,t2)->t1.compareTo(t2);
+        int compare = com1.compare(12, 22);
+        System.out.println(compare);
+
+        System.out.println("--------------------------------------");
+
+        Comparator<Integer> com2 = Integer::compareTo;
+        int compare1 = com2.compare(12, 22);//相当于12.compareTo(22)
+        System.out.println(compare1);
+
+        System.out.println("-----------------------------------------");
+
+        BiPredicate<String,String> pre = String::equals;
+        boolean test = pre.test("abc", "abc");
+        System.out.println(test);
+
+        System.out.println("-------------------------------------------");
+
+        Person tom = new Person("Tom", 12);
+        Function<Person,String> pre1 = Person::getName;
+        String apply = pre1.apply(tom);
+        System.out.println(apply);
+    }
+}
+```
+
+## 5.构造器引用
+
+和方法引用类似，函数式接口的抽象方法的形参列表和构造器的形参列表一致，
+抽象方法的返回值类型即为构造器所属的类
+
+```java
+import org.junit.Test;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ConstructorRefTest {
+    @Test
+    public void test1(){
+        Supplier<Person> per = ()->new Person();
+        per.get();
+        System.out.println("--------------------------------");
+        Supplier<Person> per1 = Person::new;
+        per1.get();
+    }
+    @Test
+    public void test2(){
+        Function<Integer,Person> per = Person::new;
+        Person apply = per.apply(12);
+        System.out.println(apply);
+    }
+    @Test
+    public void test3(){
+        BiFunction<String,Integer,Person> per = Person::new;
+        Person tom = per.apply("tom", 12);
+        System.out.println(tom);
+    }
+}
+```
+
+## 6.数组引用
+把数组看做是特殊的类，就相当于构造器引用
+
+```java
+class Test{
+  @Test
+  public void test4(){
+    Function<Integer,String[]> func1 = length -> new String[length];
+    func1.apply(12);
+    System.out.println("---------------------------");
+    Function<Integer,String[]> func2 = String[]::new;
+    func2.apply(12);
+  }
+}
+```
+
+## 7.强大的Stream API
+
+### 概念
+Stream关注的是对数据的运算，与CPU打交道，集合关注的是数据的存储，与内存打交道
+
+### Stream特点
+1. Stream自己不会存储元素
+2. Stream不会改变源对象，相反，会返回一个持有结果的新Stream
+3. Stream 操作是延迟执行的，这意味着他们会等到需要结果的时候才执行
+
+### Stream的执行流程
+1. Stream的实例化
+2. 一系列的中间操作（过滤、映射、。。。）
+
+### Stream说明
+* 一个中间操作链，对数据源的数据进行处理
+* 一旦执行终止操作，就执行中间操作链，并产生结果，之后，不会再被使用
+
+### 1. Stream的实例化
+```java
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class StreamAPITest {
+    //创建Stream方式一：通过集合
+    @Test
+    public void test1(){
+        List<Employee> employees = EmployeeData.getEmployees();
+        //stream（）:返回一个顺序流
+        Stream<Employee> stream = employees.stream();
+        //parallelStream()返回一个并行流
+        Stream<Employee> employeeStream = employees.parallelStream();
+    }
+    //创建Stream方式二：通过数组
+    @Test
+    public void test2(){
+        //Arrays.stream(T[] array):返回一个流
+        int[] arr = new int[]{1,2,3,4,5};
+        IntStream stream = Arrays.stream(arr);
+
+        Employee tom = new Employee(1001, "Tom", 12, 122);
+        Employee Jerry = new Employee(1001, "Jerry", 12, 122);
+        Employee[] employees = {tom, Jerry};
+        Stream<Employee> stream1 = Arrays.stream(employees);
+    }
+    //创建Stream方式三：Stream.of();
+    @Test
+    public void test3(){
+        Stream<Integer> integerStream = Stream.of(1, 2, 3, 4);
+    }
+    //创建Stream方式四：创建无限流
+    @Test
+    public void test4(){
+        //迭代
+        //遍历前10个偶数
+        Stream.iterate(0,t->t+2).limit(10).forEach(System.out::println);
+
+        //生成
+        //Stream.generate(Supplier<T> s)
+        Stream.generate(Math::random).limit(10).forEach(System.out::println);
+    }
+}
+
+```
+
+### 2. Stream的中间操作
+
+```java
+class Test{
+  //1.筛选与切片
+  @Test
+  public void test5(){
+    List<Employee> employees = EmployeeData.getEmployees();
+    Stream<Employee> stream = employees.stream();
+    //过滤
+    stream.filter(e->e.getSalary()>601).forEach(System.out::println);
+    System.out.println();
+
+    //截断
+    employees.stream().limit(3).forEach(System.out::println);
+    System.out.println();
+
+    //跳过数据
+    employees.stream().skip(2).forEach(System.out::println);
+    System.out.println();
+
+    //筛选:通过流所生成元素的hashCode和equals去除重复元素
+    employees.stream().distinct().forEach(System.out::println);
+  }
+  //2.映射
+  @Test
+  public void test6(){
+    //map(Function f) 接受一个函数作为参数，将元素转换成其他形式或提取信息，该函数会被应用到每个元素上，并将其映射成一个新的元素
+    List<String> list = Arrays.asList("aa", "bb", "cc");
+    list.stream().map(str->str.toUpperCase()).forEach(System.out::println);
+
+    //练习1：获取员工姓名长度大于3的员工
+    List<Employee> employees = EmployeeData.getEmployees();
+    Stream<String> nameStream = employees.stream().map(Employee::getName);
+    nameStream.filter(e->e.length()>3).forEach(System.out::println);
+
+    //练习2：
+    Stream<Stream<Character>> streamStream = list.stream().map(StreamAPITest::fromStringToStream);
+    streamStream.forEach(s->s.forEach(System.out::println));
+    //flatMap(Function f)接受一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流
+    Stream<Character> characterStream = list.stream().flatMap(StreamAPITest::fromStringToStream);
+    characterStream.forEach(System.out::println);
+  }
+  //将字符串中的多个字符构成的集合转换为对应的Stream的实例
+  public static Stream<Character> fromStringToStream(String str){
+    ArrayList<Character> list = new ArrayList<>();
+    for (Character c:str.toCharArray()) {
+      list.add(c);
+    }
+    return list.stream();
+  }
+  //3.排序（排序的类需要实现Comparable接口或者定制排序）
+  @Test
+  public void test7(){
+    List<Integer> integers = Arrays.asList( 34, 56,12, 78, 90);
+    integers.stream().sorted().forEach(System.out::println);
+
+    //定制排序
+    List<Employee> employees = EmployeeData.getEmployees();
+    employees.stream().sorted((e1,e2)->Integer.compare(e1.getAge(),e2.getAge())).forEach(System.out::println);
+  }
+}
+```
+
+### 3. Stream的终止操作
