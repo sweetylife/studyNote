@@ -1,10 +1,12 @@
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamTest1 {
+    //1.匹配与查找
     @Test
     public void test1(){
         List<Employee> employees = EmployeeData.getEmployees();
@@ -40,5 +42,41 @@ public class StreamTest1 {
         employees.stream().forEach(System.out::println);
         //集合的遍历操作
         employees.forEach(System.out::println);
+    }
+    //2.归约
+    @Test
+    public void test2(){
+        //reduce(T identity,BinaryOperation)可以将流中元素反复结合起来，得到一个只。返回T
+        //练习：求1-10的自然数的和
+        List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Integer reduce = integers.stream().reduce(100, Integer::sum);
+        System.out.println(reduce);
+        //练习2：计算员工的总工资
+        List<Employee> employees = EmployeeData.getEmployees();
+        //有初始值
+        Stream<Double> doubleStream = employees.stream().map(Employee::getSalary);
+        Double reduce1 = doubleStream.reduce(1000.0, Double::sum);
+        System.out.println(reduce1);
+        //无初始值
+        Stream<Double> doubleStream2 = employees.stream().map(Employee::getSalary);
+        Optional<Double> reduce2 = doubleStream2.reduce(Double::sum);
+        System.out.println(reduce2);
+        //自定义
+        Stream<Double> doubleStream3 = employees.stream().map(Employee::getSalary);
+        Optional<Double> reduce3 = doubleStream3.reduce((e1, e2) -> e1 + e2);
+        System.out.println(reduce3);
+    }
+
+    //3.收集
+    @Test
+    public void test7(){
+        // collect(Collector c) 将流转换为其他形式。接受一个Collector接口的实现，用于给Stream中元素做汇总
+        //练习：查找工资大于600的员工
+        List<Employee> employees = EmployeeData.getEmployees();
+        List<Employee> collect = employees.stream().filter(e -> e.getSalary() > 600).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+        System.out.println();
+        Set<Employee> collect1 = employees.stream().filter(e -> e.getSalary() > 600).collect(Collectors.toSet());
+        collect1.forEach(System.out::println);
     }
 }
