@@ -1,13 +1,7 @@
-# java10新特性
-
-## 1.局部变量类型推断
-
-### 适用情况
-
-```java
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Java10Test {
     @Test
@@ -26,21 +20,6 @@ public class Java10Test {
             System.out.println(i);
         }
     }
-}
-```
-
-### 不适用情况
-
-* 没有初始化的局部变量声明
-* 方法的返回类型
-* 方法的参数类型
-* 属性
-* catch代码块
-
-## 2.集合新增创建不可变集合的方法
-List.copyOf(Xxx coll):如果参数coll本身就是一个只读集合，则直接返回coll。如果参数coll不是只读集合，会返回一个新的只读集合。
-```java
-class Test{
     @Test
     public void test2(){
         //示例1
@@ -54,4 +33,3 @@ class Test{
         System.out.println(copy2==list2);//false
     }
 }
-```
