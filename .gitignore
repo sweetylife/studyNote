@@ -2,4 +2,5 @@
 .idea
 .settings
 *.jar
+**/application.yml
 .gitignore
