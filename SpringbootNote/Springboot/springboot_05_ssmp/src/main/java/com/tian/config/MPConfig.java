@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @ package: com.tian.config
  * @ className: MPConfig
  * @ author: tian
- * @ description: TODO
+ * @ description:
  * @ date: 2021/12/21 15:41
  * @ version: 1.0
  */

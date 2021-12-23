@@ -21,7 +21,14 @@ public class DefinitionException extends RuntimeException{
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
-
+    public DefinitionException(ErrorEnum errorEnum) {
+        this.errorCode = errorEnum.getErrorCode();
+        this.errorMsg = errorEnum.getErrorMsg();
+    }
+    public DefinitionException(String errorMsg) {
+        this.errorCode = ErrorEnum.ERROR_MESSAGE.getErrorCode();
+        this.errorMsg = errorMsg;
+    }
     public Integer getErrorCode() {
         return errorCode;
     }

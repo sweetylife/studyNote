@@ -19,9 +19,8 @@ public class Book {
     private Integer id;
     private String type;
 
-    @NotBlank
+//    @NotBlank
     private String name;
-
     @TableField("description")
     private String des;
 }

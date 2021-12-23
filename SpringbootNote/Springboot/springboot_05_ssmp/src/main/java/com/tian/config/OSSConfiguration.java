@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
  * @ package: com.tian.config
  * @ className: OSSConfiguration
  * @ author: tian
- * @ description: TODO
+ * @ description:
  * @ date: 2021/12/23 13:17
  * @ version: 1.0
  */

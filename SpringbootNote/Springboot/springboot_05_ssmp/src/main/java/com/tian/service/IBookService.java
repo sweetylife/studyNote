@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tian.domain.Book;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IBookService extends IService<Book> {
     List<Book> getAll();
@@ -12,4 +13,5 @@ public interface IBookService extends IService<Book> {
     boolean modify(Book book);
     boolean delete(Integer id);
     IPage<Book> getPageList(Integer pageCurrent,Integer pageSize);
+    Map<String,Object> login(Book book);
 }

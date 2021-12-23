@@ -29,8 +29,8 @@ public class ProjectExceptionAdvice {
     //处理其他异常
     @ExceptionHandler(value = Exception.class)
     public ResultResponse exceptionHandler( Exception e) {
+        e.printStackTrace();
         System.out.println("拦截：处理系统异常");
-        System.out.println(e);
         return ResultResponse.otherError(ErrorEnum.INTERNAL_SERVER_ERROR);
     }
 

@@ -7,6 +7,7 @@ import com.tian.service.IBookService;
 import com.tian.service.OSSService;
 import com.tian.utils.result.PageInfo;
 import com.tian.utils.result.ResultResponse;
+import com.tian.utils.tools.ObjectToMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Map;
 
 /**
  * @ projectName: Springboot
@@ -79,6 +79,19 @@ public class BookController {
         String tiantiantest = ossService.uploadFile(multipartFile, "tiantiantest");
         return ResultResponse.success(tiantiantest);
     }
+
+    @PostMapping("login")
+    public ResultResponse<JSONObject> login(@RequestBody Book book) {
+        Map<String, Object> map = bookService.login(book);
+        Map<String, Object> map1 = null;
+        try {
+            map1 = ObjectToMap.getObjectToMap(map.get("user"));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        map1.put("token",map.get("token"));
+        return ResultResponse.success(map1);
+    }
 //    =========================================================================================
 //    成功：调用success
 //    @GetMapping("list")
@@ -104,7 +117,18 @@ public class BookController {
 //        if(true) throw new DefinitionException(111,"自定义异常");
 //        return ResultResponse.success("成功");
 //    }
-
+//    抛出定义过的异常（走拦截器）
+//    @GetMapping("list")
+//    public ResultResponse<JSONObject> getAll(){
+//        if(true) throw new DefinitionException(ErrorEnum.NO_PARAM);
+//        return ResultResponse.success("成功");
+//    }
+//    抛出400异常
+//    @GetMapping("list")
+//    public ResultResponse<JSONObject> getAll(){
+//        if(true) throw new DefinitionException("400的异常信息");
+//        return ResultResponse.success("成功");
+//    }
 
 //   返回已经定义过的异常（没有走拦截器）
 //    @GetMapping("list")

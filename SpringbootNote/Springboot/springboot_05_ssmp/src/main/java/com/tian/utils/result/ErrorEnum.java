@@ -3,6 +3,7 @@ package com.tian.utils.result;
 public enum ErrorEnum {
     // 数据操作错误定义
     SUCCESS(200, "请求成功"),
+    ERROR_MESSAGE(400,""),
     NO_AUTH(401,"登录失效"),
     NO_PARAM(402,"参数异常"),
     NO_PERMISSION(403,"没有权限"),
