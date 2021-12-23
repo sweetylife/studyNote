@@ -1,0 +1,31 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tbl_
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+aliyun:
+  endpoint: http://oss-cn-beijing.aliyuncs.com
+  accessKeyId: LTAI5t9LYAtyiSNPxqByCmxc
+  accessKeySecret: CXabwDAJQCCyf873rXZ4geefb1YnLG
+  bucketName: triptemp
+
