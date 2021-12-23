@@ -25,7 +25,7 @@ mybatis-plus:
 
 aliyun:
   endpoint: http://oss-cn-beijing.aliyuncs.com
-  accessKeyId: LTAI5t9LYAtyiSNPxqByCmxc
+  accessKeyId: xxxxxxxxxxxxxxxxxxxxxxxxxxx
   accessKeySecret: xxxxxxxxxxxxxxxxxxxxxx
   bucketName: triptemp
 
