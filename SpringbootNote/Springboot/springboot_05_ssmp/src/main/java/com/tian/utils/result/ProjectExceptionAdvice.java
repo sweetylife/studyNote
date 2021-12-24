@@ -1,5 +1,6 @@
 package com.tian.utils.result;
 
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,5 +40,11 @@ public class ProjectExceptionAdvice {
         String field = me.getBindingResult().getFieldError().getField();
         String message = me.getBindingResult().getFieldError().getDefaultMessage();
         return ResultResponse.defineError(new DefinitionException(ErrorEnum.NO_PARAM.getErrorCode(),field+message));
+    }
+
+    //请求方式不符合的异常拦截
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResultResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException me){
+        return ResultResponse.defineError(new DefinitionException("不支持的请求方式"));
     }
 }

@@ -1,6 +1,7 @@
 package com.tian.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
@@ -23,4 +24,7 @@ public class Book {
     private String name;
     @TableField("description")
     private String des;
+
+    @TableLogic
+    private Integer deleted;
 }

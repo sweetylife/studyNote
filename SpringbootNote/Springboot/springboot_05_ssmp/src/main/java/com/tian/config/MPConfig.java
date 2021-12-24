@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MPConfig {
-    @Bean  //分页拦截器
+    @Bean  //各种拦截器
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());//分页拦截器
         return interceptor;
     }
 }

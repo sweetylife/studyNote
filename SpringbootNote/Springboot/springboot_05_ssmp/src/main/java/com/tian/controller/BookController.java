@@ -2,6 +2,7 @@ package com.tian.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.sun.tracing.dtrace.Attributes;
 import com.tian.domain.Book;
 import com.tian.service.IBookService;
 import com.tian.service.OSSService;
@@ -66,10 +67,11 @@ public class BookController {
     }
 
     @PostMapping("delete")
-    public Boolean delete(@RequestBody JSONObject jsonObject){
+    public ResultResponse<JSONObject> delete(@RequestBody JSONObject jsonObject,@RequestAttribute Integer requestId){
+        System.out.println("requestId：：：："+requestId);
         Object id = jsonObject.get("id");
-        System.out.println(id);
-        return (Integer)id>0;
+        boolean delete = bookService.delete((Integer) id);
+        return ResultResponse.success(delete);
     }
 
     @PostMapping("upload")
